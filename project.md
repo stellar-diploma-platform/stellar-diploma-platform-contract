@@ -1,4 +1,4 @@
-this # Verifiable Diplomas — Soulbound NFTs on Stellar
+ # Verifiable Diplomas — Soulbound NFTs on Stellar
 
 > A decentralized credential verification platform where universities issue tamper-proof, non-transferable academic certificates as Soulbound NFTs using **Stellar + Soroban** smart contracts.
 
