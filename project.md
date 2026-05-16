@@ -1,66 +1,90 @@
-Verifiable Diplomas (Soulbound NFTs) on Stellar
+this # Verifiable Diplomas — Soulbound NFTs on Stellar
 
-A decentralized credential verification platform where universities issue tamper-proof, non-transferable academic certificates as Soulbound NFTs using Stellar + Soroban smart contracts.
+> A decentralized credential verification platform where universities issue tamper-proof, non-transferable academic certificates as Soulbound NFTs using **Stellar + Soroban** smart contracts.
 
-Students own their credentials permanently, employers can verify authenticity instantly, and institutions eliminate diploma fraud.
+Students own their credentials permanently, employers verify authenticity instantly, and institutions eliminate diploma fraud.
 
-1. Project Overview
-Core Idea
+---
 
-Universities issue:
+## Table of Contents
 
-Degree certificates
-Diplomas
-Professional certifications
-Transcripts
-Course completion badges
+1. [Project Overview](#1-project-overview)
+2. [Why Stellar + Soroban](#2-why-stellar--soroban)
+3. [Main Actors](#3-main-actors)
+4. [Core Features](#4-core-features)
+5. [System Architecture](#5-system-architecture)
+6. [Smart Contract Architecture](#6-smart-contract-architecture)
+7. [Tech Stack](#7-tech-stack)
+8. [Project Structure](#8-project-structure)
+9. [Soulbound NFT Logic](#9-soulbound-nft-logic)
+10. [Contract Data Model](#10-contract-data-model)
+11. [Key Contract Functions](#11-key-contract-functions)
+12. [Backend Architecture](#12-backend-architecture)
+13. [Frontend Pages](#13-frontend-pages)
+14. [Database Schema](#14-database-schema)
+15. [Metadata & Storage](#15-metadata--storage)
+16. [Verification Flow](#16-verification-flow)
+17. [Security Features](#17-security-features)
+18. [Advanced Features](#18-advanced-features)
+19. [Development Setup](#19-development-setup)
+20. [Testing Strategy](#20-testing-strategy)
+21. [DevOps & CI/CD](#21-devops--cicd)
+22. [MVP Roadmap](#22-mvp-roadmap)
+23. [Example User Flows](#23-example-user-flows)
+24. [Best Practices](#24-best-practices)
+25. [Future Expansion](#25-future-expansion)
 
-as non-transferable NFTs (Soulbound Tokens) on Stellar.
+---
+
+## 1. Project Overview
+
+Universities issue the following as **non-transferable NFTs (Soulbound Tokens)** on Stellar:
+
+- Degree certificates
+- Diplomas & transcripts
+- Professional certifications
+- Course completion badges
 
 These credentials:
 
-Cannot be sold or transferred
-Are cryptographically verifiable
-Exist permanently on-chain
-Can be publicly verified by employers
-Can be revoked by universities if necessary
-2. Why Stellar + Soroban
-Why Stellar
-Fast Transactions
+- ❌ Cannot be sold or transferred
+- ✅ Are cryptographically verifiable
+- ✅ Exist permanently on-chain
+- ✅ Can be publicly verified by employers
+- ✅ Can be revoked by universities if necessary
 
-Credential issuance and verification happen instantly.
+---
 
-Very Low Fees
+## 2. Why Stellar + Soroban
 
-Perfect for universities issuing thousands of certificates.
+| Feature | Benefit |
+|---|---|
+| **Fast Transactions** | Credential issuance and verification happen instantly |
+| **Very Low Fees** | Ideal for universities issuing thousands of certificates |
+| **Institutional Ecosystem** | Stellar supports compliance and institutional-grade systems |
+| **Soroban Smart Contracts** | Enables soulbound logic, revocation, role-based issuance, and metadata handling |
 
-Built-in Identity-Friendly Ecosystem
+---
 
-Stellar already supports compliance and institutional-grade systems.
+## 3. Main Actors
 
-Soroban Smart Contracts
+| Actor | Role |
+|---|---|
+| **University** | Issues diplomas |
+| **Student** | Receives and owns credentials |
+| **Employer** | Verifies diploma authenticity |
+| **Accreditation Body** | Approves universities |
+| **Admin** | System governance |
 
-Allows:
+---
 
-Soulbound NFT logic
-Verification rules
-Revocation systems
-Role-based issuance
-Metadata handling
-3. Main Actors
-Actor	Role
-University	Issues diplomas
-Student	Receives credential
-Employer	Verifies diploma
-Accreditation Body	Approves universities
-Admin	System governance
-4. Core Features
-A. Soulbound Diploma NFTs
+## 4. Core Features
 
-Non-transferable NFT certificates.
+### A. Soulbound Diploma NFTs
 
-Each NFT contains:
+Non-transferable NFT certificates. Each NFT contains:
 
+```json
 {
   "student_name": "John Doe",
   "degree": "BSc Computer Science",
@@ -70,139 +94,71 @@ Each NFT contains:
   "certificate_hash": "QmX...",
   "issue_date": "2026-07-01"
 }
-B. Credential Verification Portal
+```
 
-Employers can:
+### B. Credential Verification Portal
 
-Enter wallet address
-Scan QR code
-Check diploma authenticity
-Verify issuer accreditation
-C. Revocation System
+Employers can enter a wallet address, scan a QR code, check diploma authenticity, and verify issuer accreditation.
 
-Universities can revoke:
+### C. Revocation System
 
-Fraudulent diplomas
-Administrative mistakes
-Suspended credentials
-D. Multi-University Support
+Universities can revoke fraudulent diplomas, administrative mistakes, or suspended credentials.
 
-Platform supports:
+### D. Multi-Institution Support
 
-Universities
-Bootcamps
-Online academies
-Government institutions
-E. Privacy Layer
+Supports universities, bootcamps, online academies, and government institutions.
 
-Sensitive data stored off-chain.
+### E. Privacy Layer
 
-On-chain stores:
+| Storage | Data |
+|---|---|
+| **On-chain** | Hashes, references, proofs |
+| **Off-chain** | Full transcript PDFs, metadata, student documents |
 
-Hashes
-References
-Proofs
+---
 
-Off-chain stores:
+## 5. System Architecture
 
-Full transcript PDFs
-Metadata
-Student documents
-5. System Architecture
-High-Level Architecture
+```
                     ┌────────────────────┐
                     │  Frontend Portal   │
                     └─────────┬──────────┘
                               │
                ┌──────────────┴──────────────┐
                │                             │
-      ┌────────▼────────┐         ┌─────────▼────────┐
-      │  Backend API    │         │ Verification API │
-      └────────┬────────┘         └─────────┬────────┘
-               │                            │
-               │                            │
-       ┌───────▼────────────────────────────▼──────┐
-       │        Soroban Smart Contracts             │
-       │                                            │
-       │  - Diploma NFT Contract                    │
-       │  - University Registry                     │
-       │  - Revocation Contract                     │
-       └────────────────────────────────────────────┘
+      ┌────────▼────────┐         ┌──────────▼───────┐
+      │  Backend API    │         │ Verification API  │
+      └────────┬────────┘         └──────────┬────────┘
+               │                             │
+       ┌───────▼─────────────────────────────▼──────┐
+       │             Soroban Smart Contracts         │
+       │                                             │
+       │  · Diploma NFT Contract                     │
+       │  · University Registry                      │
+       │  · Revocation Contract                      │
+       └─────────────────────────────────────────────┘
                               │
                      ┌────────▼────────┐
                      │ Stellar Network │
                      └─────────────────┘
-6. Smart Contract Architecture
-Main Contracts
-Contract	Purpose
-diploma_contract	Soulbound NFT issuance
-university_registry	Approved institutions
-revocation_contract	Revoked certificates
-access_control	Role permissions
-metadata_registry	Credential metadata
-7. Recommended Tech Stack
-Blockchain
-Component	Technology
-Blockchain	Stellar
-Smart Contracts	Soroban SDK (Rust)
-Wallet	Freighter
-Storage	IPFS
-Indexing	Stellar RPC/Horizon
-Backend
-Component	Tech
-API	Node.js / NestJS
-Database	PostgreSQL
-Queue	Redis/BullMQ
-Authentication	JWT/OAuth
-File Storage	IPFS/Filecoin
-Frontend
-Component	Tech
-Framework	Next.js
-Styling	TailwindCSS
-Wallet Integration	Freighter API
-State Management	Zustand
-QR Verification	qrcode.js
-8. Full Project Folder Structure
-Monorepo Structure
-stellar-diploma-platform/
-│
-├── apps/
-│   ├── frontend/
-│   ├── backend/
-│   ├── verifier-portal/
-│   └── admin-dashboard/
-│
-├── contracts/
-│   ├── diploma_contract/
-│   ├── university_registry/
-│   ├── revocation_contract/
-│   ├── access_control/
-│   └── shared/
-│
-├── packages/
-│   ├── sdk/
-│   ├── ui/
-│   ├── types/
-│   └── config/
-│
-├── infrastructure/
-│   ├── docker/
-│   ├── kubernetes/
-│   ├── terraform/
-│   └── monitoring/
-│
-├── scripts/
-│   ├── deploy/
-│   ├── seed/
-│   └── migration/
-│
-├── docs/
-├── tests/
-├── .github/
-└── README.md
-9. Smart Contract Structure
+```
+
+---
+
+## 6. Smart Contract Architecture
+
+| Contract | Purpose |
+|---|---|
+| `diploma_contract` | Soulbound NFT issuance |
+| `university_registry` | Approved institutions |
+| `revocation_contract` | Revoked certificates |
+| `access_control` | Role permissions |
+| `metadata_registry` | Credential metadata |
+
+### Contract File Structure
+
+```
 contracts/diploma_contract/
-│
 ├── src/
 │   ├── lib.rs
 │   ├── storage.rs
@@ -213,26 +169,100 @@ contracts/diploma_contract/
 │   ├── verify.rs
 │   ├── metadata.rs
 │   └── soulbound.rs
-│
 ├── Cargo.toml
 └── Makefile
-10. Soulbound NFT Logic
-Core Rules
-Allowed
+```
 
-✅ Mint diploma
-✅ Verify diploma
-✅ Revoke diploma
-✅ Read metadata
+---
 
-Forbidden
+## 7. Tech Stack
 
-❌ Transfer NFT
-❌ Sell NFT
-❌ Approve NFT transfers
+### Blockchain
 
-11. Contract Data Model
-Diploma Struct
+| Component | Technology |
+|---|---|
+| Blockchain | Stellar |
+| Smart Contracts | Soroban SDK (Rust) |
+| Wallet | Freighter |
+| Storage | IPFS |
+| Indexing | Stellar RPC / Horizon |
+
+### Backend
+
+| Component | Technology |
+|---|---|
+| API | Node.js / NestJS |
+| Database | PostgreSQL |
+| Queue | Redis / BullMQ |
+| Authentication | JWT / OAuth |
+| File Storage | IPFS / Filecoin |
+
+### Frontend
+
+| Component | Technology |
+|---|---|
+| Framework | Next.js |
+| Styling | TailwindCSS |
+| Wallet Integration | Freighter API |
+| State Management | Zustand |
+| QR Verification | qrcode.js |
+
+---
+
+## 8. Project Structure
+
+```
+stellar-diploma-platform/
+├── apps/
+│   ├── frontend/
+│   ├── backend/
+│   ├── verifier-portal/
+│   └── admin-dashboard/
+├── contracts/
+│   ├── diploma_contract/
+│   ├── university_registry/
+│   ├── revocation_contract/
+│   ├── access_control/
+│   └── shared/
+├── packages/
+│   ├── sdk/
+│   ├── ui/
+│   ├── types/
+│   └── config/
+├── infrastructure/
+│   ├── docker/
+│   ├── kubernetes/
+│   ├── terraform/
+│   └── monitoring/
+├── scripts/
+│   ├── deploy/
+│   ├── seed/
+│   └── migration/
+├── docs/
+├── tests/
+├── .github/
+└── README.md
+```
+
+---
+
+## 9. Soulbound NFT Logic
+
+| Action | Allowed |
+|---|---|
+| Mint diploma | ✅ |
+| Verify diploma | ✅ |
+| Revoke diploma | ✅ |
+| Read metadata | ✅ |
+| Transfer NFT | ❌ |
+| Sell NFT | ❌ |
+| Approve NFT transfers | ❌ |
+
+---
+
+## 10. Contract Data Model
+
+```rust
 pub struct Diploma {
     pub token_id: u64,
     pub student: Address,
@@ -243,48 +273,42 @@ pub struct Diploma {
     pub revoked: bool,
     pub metadata_uri: String,
 }
-12. Important Contract Functions
-A. Issue Diploma
-fn mint_diploma(
-    env: Env,
-    student: Address,
-    degree: Symbol,
-    metadata_uri: String
-)
-B. Verify Diploma
-fn verify_diploma(
-    env: Env,
-    token_id: u64
-) -> bool
-C. Revoke Diploma
-fn revoke_diploma(
-    env: Env,
-    token_id: u64
-)
-D. Prevent Transfer
+```
+
+---
+
+## 11. Key Contract Functions
+
+```rust
+// Issue a diploma
+fn mint_diploma(env: Env, student: Address, degree: Symbol, metadata_uri: String)
+
+// Verify a diploma
+fn verify_diploma(env: Env, token_id: u64) -> bool
+
+// Revoke a diploma
+fn revoke_diploma(env: Env, token_id: u64)
+
+// Block transfers (soulbound enforcement)
 fn transfer(...) {
     panic!("Soulbound token: transfer disabled");
 }
-13. University Registry Contract
+```
 
-Maintains approved institutions.
+---
 
-Features
-Add university
-Remove university
-Accreditation status
-Public verification
-14. Backend Architecture
-Backend Responsibilities
-Service	Purpose
-Auth Service	University login
-Diploma Service	Issue certificates
-Verification Service	Public verification
-Metadata Service	IPFS uploads
-Notification Service	Email students
-Backend Structure
+## 12. Backend Architecture
+
+| Service | Purpose |
+|---|---|
+| Auth Service | University login |
+| Diploma Service | Issue certificates |
+| Verification Service | Public verification |
+| Metadata Service | IPFS uploads |
+| Notification Service | Email students |
+
+```
 apps/backend/
-│
 ├── src/
 │   ├── modules/
 │   │   ├── auth/
@@ -292,374 +316,260 @@ apps/backend/
 │   │   ├── university/
 │   │   ├── verification/
 │   │   └── notifications/
-│   │
 │   ├── blockchain/
 │   ├── database/
 │   ├── config/
 │   └── utils/
-│
 ├── prisma/
 └── package.json
-15. Frontend Pages
-Student Portal
+```
+
+---
+
+## 13. Frontend Pages
+
+```
 /student
 ├── dashboard
 ├── my-certificates
 ├── wallet-connect
 └── profile
-Employer Verification Portal
+
 /verify
 ├── qr-scan
 ├── search
 ├── result
 └── accreditation
-University Dashboard
+
 /university
 ├── issue-diploma
 ├── batch-upload
 ├── revoke
 ├── analytics
 └── settings
-16. Database Schema
-PostgreSQL Tables
-universities
-id
-name
-wallet_address
-accredited
-created_at
-diplomas
-id
-student_wallet
-token_id
-degree
-metadata_hash
-revoked
-issued_at
-verification_logs
-id
-employer
-token_id
-verified_at
-17. Metadata Storage
-Recommended Approach
-On-chain
+```
 
-Store:
+---
 
-IPFS hash
-Credential hash
-Token ownership
-Revocation status
-Off-chain
+## 14. Database Schema
 
-Store:
+**`universities`** — `id`, `name`, `wallet_address`, `accredited`, `created_at`
 
-PDF diploma
-Student photo
-Transcript
-Additional metadata
-18. IPFS Structure
+**`diplomas`** — `id`, `student_wallet`, `token_id`, `degree`, `metadata_hash`, `revoked`, `issued_at`
+
+**`verification_logs`** — `id`, `employer`, `token_id`, `verified_at`
+
+---
+
+## 15. Metadata & Storage
+
+### On-chain
+- IPFS hash, credential hash, token ownership, revocation status
+
+### Off-chain (IPFS)
+
+```json
 {
   "name": "Bachelor of Science",
   "description": "Official diploma NFT",
   "image": "ipfs://...",
   "attributes": [
-    {
-      "trait_type": "Institution",
-      "value": "ABC University"
-    },
-    {
-      "trait_type": "Major",
-      "value": "Computer Science"
-    }
+    { "trait_type": "Institution", "value": "ABC University" },
+    { "trait_type": "Major", "value": "Computer Science" }
   ]
 }
-19. Verification Flow
-Employer Verification Process
-Employer scans QR
-        ↓
-Frontend fetches token
-        ↓
-Backend checks Stellar
-        ↓
-Contract verifies:
-    - token exists
-    - not revoked
-    - issuer approved
-        ↓
-Result displayed
-20. QR Code System
+```
 
-Each diploma includes:
+### Batch Minting via CSV
 
-https://verify.project.com/token/2391
-
-QR embedded in:
-
-PDF diploma
-Printed certificate
-Student profile
-21. Security Features
-Critical Security Measures
-Role-Based Access
-
-Only accredited universities can mint.
-
-Multi-Sig University Wallets
-
-Protect issuance authority.
-
-Immutable Issuance Logs
-
-Every diploma permanently auditable.
-
-Anti-Fraud Verification
-
-Detect fake issuers.
-
-22. Advanced Features
-A. Zero-Knowledge Proof Verification
-
-Students prove:
-
-Degree ownership
-GPA range
-Graduation status
-
-without revealing full transcript.
-
-B. AI Fraud Detection
-
-Detect:
-
-Duplicate certificates
-Suspicious issuance
-Fake institutions
-C. Cross-Chain Credentials
-
-Mirror credentials on:
-
-Ethereum
-Polygon
-Solana
-D. Resume Integration
-
-Generate:
-
-Verified CV
-LinkedIn integrations
-On-chain reputation
-23. Batch Diploma Minting
-
-Universities upload CSV:
-
+```csv
 student_wallet,degree,major
 GABCD...,BSc,Computer Science
 GXYZ...,MBA,Business
+```
 
-Backend automatically:
+---
 
-Uploads metadata
-Mints NFTs
-Emails students
-24. Soroban Development Setup
-Install Rust
+## 16. Verification Flow
+
+```
+Employer scans QR
+       ↓
+Frontend fetches token
+       ↓
+Backend checks Stellar
+       ↓
+Contract verifies:
+  · token exists
+  · not revoked
+  · issuer approved
+       ↓
+Result displayed
+```
+
+Each diploma includes a unique verification URL embedded in the PDF, printed certificate, and student profile:
+
+```
+https://verify.project.com/token/2391
+```
+
+---
+
+## 17. Security Features
+
+| Measure | Description |
+|---|---|
+| **Role-Based Access** | Only accredited universities can mint |
+| **Multi-Sig Wallets** | Protect university issuance authority |
+| **Immutable Logs** | Every diploma permanently auditable |
+| **Anti-Fraud Verification** | Detect fake issuers |
+
+---
+
+## 18. Advanced Features
+
+| Feature | Description |
+|---|---|
+| **Zero-Knowledge Proofs** | Prove degree ownership or GPA range without revealing full transcript |
+| **AI Fraud Detection** | Detect duplicate certificates, suspicious issuance, fake institutions |
+| **Cross-Chain Credentials** | Mirror credentials on Ethereum, Polygon, Solana |
+| **Resume Integration** | Generate verified CVs and LinkedIn integrations |
+
+---
+
+## 19. Development Setup
+
+```bash
+# Install Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-Add WASM Target
+
+# Add WASM target
 rustup target add wasm32v1-none
-Install Stellar CLI
+
+# Install Stellar CLI
 cargo install stellar-cli
-Verify
+
+# Verify installation
 stellar --version
-25. Create Contract
+
+# Initialize contract
 stellar contract init diploma_contract
-26. Local Development
-Start Local Sandbox
+
+# Start local sandbox
 stellar network sandbox start
-Deploy Contract
+
+# Deploy contract
 stellar contract deploy \
   --wasm target/wasm32v1-none/release/diploma_contract.wasm \
   --source alice
-27. Testing Strategy
-Smart Contract Tests
+```
+
+---
+
+## 20. Testing Strategy
+
+```
 tests/
 ├── mint.rs
 ├── revoke.rs
 ├── verification.rs
 ├── soulbound.rs
 └── access_control.rs
-Frontend Tests
+```
 
-Use:
+| Layer | Tools |
+|---|---|
+| Smart Contracts | Rust built-in tests |
+| Backend | Jest, Supertest |
+| Frontend | Vitest, Playwright, Cypress |
 
-Vitest
-Playwright
-Cypress
-Backend Tests
+---
 
-Use:
+## 21. DevOps & CI/CD
 
-Jest
-Supertest
-28. DevOps Architecture
-Recommended Deployment
-Component	Platform
-Frontend	Vercel
-Backend	Railway/Fly.io
-Database	Supabase/Postgres
-IPFS	Pinata
-Monitoring	Grafana
-29. CI/CD Pipeline
-GitHub Actions
-    ↓
-Run Tests
-    ↓
-Build Contracts
-    ↓
-Deploy to Testnet
-    ↓
-Run Integration Tests
-    ↓
-Deploy Production
-30. Token Economics (Optional)
+| Component | Platform |
+|---|---|
+| Frontend | Vercel |
+| Backend | Railway / Fly.io |
+| Database | Supabase / PostgreSQL |
+| IPFS | Pinata |
+| Monitoring | Grafana |
 
-You can introduce:
+```
+GitHub Actions → Run Tests → Build Contracts
+       → Deploy to Testnet → Integration Tests → Deploy Production
+```
 
-Token Utility	Purpose
-Verification Fees	Paid by employers
-University Staking	Prevent spam issuers
-Governance	Community voting
-31. Revenue Model
-Monetization
-Source	Example
-University subscriptions	Annual licensing
-Verification API	Employer access
-Premium analytics	Accreditation insights
-White-label solutions	Private university deployments
-32. Compliance Considerations
-Important Legal Areas
-GDPR/Data Privacy
+---
 
-Avoid storing personal student data directly on-chain.
+## 22. MVP Roadmap
 
-Accreditation Validation
+### Phase 1 — Foundation
+- ✅ University registry
+- ✅ Diploma minting
+- ✅ Verification portal
+- ✅ QR verification
 
-Require proof before allowing institutions.
+### Phase 2 — Scale
+- ✅ Batch issuance
+- ✅ Revocation system
+- ✅ Employer APIs
+- ✅ Analytics dashboard
 
-Educational Regulations
+### Phase 3 — Advanced
+- ✅ ZK proofs
+- ✅ Cross-chain credentials
+- ✅ Mobile app
+- ✅ AI fraud detection
 
-Different countries have different requirements.
+### Hackathon MVP (Minimum Viable Demo)
+- ✅ University registration
+- ✅ Soulbound diploma minting
+- ✅ QR verification
+- ✅ Employer verification page
+- ✅ Revocation support
 
-33. MVP Roadmap
-Phase 1
+### 8-Week Build Plan
 
-✅ University registry
-✅ Diploma minting
-✅ Verification portal
-✅ QR verification
+| Week | Focus |
+|---|---|
+| 1 | Soroban setup + university registry |
+| 2 | Soulbound NFT contract |
+| 3 | Verification APIs |
+| 4 | Frontend dashboard |
+| 5 | QR verification |
+| 6 | Batch minting |
+| 7 | Security audits |
+| 8 | Testnet deployment |
 
-Phase 2
+---
 
-✅ Batch issuance
-✅ Revocation system
-✅ Employer APIs
-✅ Analytics dashboard
+## 23. Example User Flows
 
-Phase 3
+**University:** Login → Upload graduates CSV → Approve transaction → Diplomas minted → Students notified
 
-✅ ZK proofs
-✅ Cross-chain credentials
-✅ Mobile app
-✅ AI fraud detection
+**Student:** Connect wallet → View diploma NFT → Download PDF → Share verification link
 
-34. Example User Flow
-University
-Login
- → Upload graduates CSV
- → Approve transaction
- → Diplomas minted
- → Students notified
-Student
-Connect wallet
- → View diploma NFT
- → Download PDF
- → Share verification link
-Employer
-Scan QR
- → Verify credential
- → Check accreditation
- → Download proof
-35. Best Soroban Design Practices
-Keep Contracts Modular
+**Employer:** Scan QR → Verify credential → Check accreditation → Download proof
 
-Avoid one giant contract.
+---
 
-Minimize On-Chain Data
+## 24. Best Practices
 
-Store hashes only.
+- **Keep contracts modular** — avoid one giant contract
+- **Minimize on-chain data** — store hashes only
+- **Emit events** — `DiplomaIssued`, `DiplomaRevoked`, `UniversityApproved`
+- **Use TTL extensions carefully** — prevent storage expiration
+- **GDPR compliance** — avoid storing personal data directly on-chain
+- **Require accreditation proof** before allowing institutions to mint
 
-Emit Events
-DiplomaIssued
-DiplomaRevoked
-UniversityApproved
-Use TTL Extensions Carefully
+---
 
-Prevent storage expiration.
+## 25. Future Expansion
 
-36. Future Expansion Ideas
-Government ID credentials
-Medical licenses
-Professional certifications
-NFT student IDs
-Scholarship records
-Academic reputation scores
-Decentralized academic transcripts
-Global education passport
-37. Final Recommended Architecture
-Frontend (Next.js)
-        ↓
-Backend API (NestJS)
-        ↓
-Soroban SDK Client
-        ↓
-Soroban Smart Contracts
-        ↓
-Stellar Network
-        ↓
-IPFS/Filecoin Storage
-38. Recommended Development Order
-Step-by-Step Build Plan
-Week 1
-Setup Soroban
-Create university registry
-Week 2
-Build Soulbound NFT contract
-Week 3
-Build verification APIs
-Week 4
-Create frontend dashboard
-Week 5
-Add QR verification
-Week 6
-Add batch minting
-Week 7
-Security audits
-Week 8
-Testnet deployment
-39. Ideal Hackathon MVP
-
-For a hackathon, build:
-
-✅ University registration
-✅ Soulbound diploma minting
-✅ QR verification
-✅ Employer verification page
-✅ Revocation support
-
-This is enough for:
-
-Demo
-Investors
-Pilot universities
-Real-world adoption
+- Government ID credentials
+- Medical licenses & professional certifications
+- NFT student IDs & scholarship records
+- Academic reputation scores
+- Decentralized academic transcripts
+- Global education passport
